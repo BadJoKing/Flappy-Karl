@@ -9,40 +9,44 @@ import java.awt.event.ActionEvent;
 
 
 public class Interface extends JFrame{
-    private JPanel menuPanel;
-    private JButton[] menu;
+    private JPanel panel;
+    private MenuPanel mp;
+    private GamePanel gp;
     private CardLayout layout;
 
     public Interface() {
         super();
-        this.layout = new CardLayout();
-
+        //sets size and layout
         this.setSize(600,800);
-        this.setLayout(new CardLayout());
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.layout = new CardLayout();
+        //creates the main panel
+        this.panel = new JPanel();
+        //sets main panel layout to the previously created CardLayout
+        this.panel.setLayout(this.layout);
+        //adds the main Panel to the Frame
+        this.add(this.panel);
 
-        this.menuPanel = new JPanel();
-        this.menuPanel.setLayout(new FlowLayout());
-        this.add(this.menuPanel);
-        this.layout.addLayoutComponent(this.menuPanel, "menu");
+        //creates the MenuPanel
+        this.mp = new MenuPanel(this);
+
+        //adds the MenuPanel to the main Panel
+        this.panel.add(this.mp);
+        //adds the MenuPanel as a LayoutComponent
+        this.layout.addLayoutComponent(this.mp, "menu");
         
-        this.menu = new JButton[3];
-        this.menu[0] = new JButton("Jeremy");
-        this.menu[0].setSize(600,800/3);
-        this.menu[0].addActionListener(new MenuListener(this, MenuListener.EXIT));
-        this.menuPanel.add(menu[0]);
+        //creates the GamePanel
+        this.gp = new GamePanel();
         
-        this.menu[1] = new JButton("Karl");
-        this.menu[1].setSize(600,800/3);
-        this.menu[1].addActionListener(new MenuListener(this, MenuListener.SETTINGS));
-        this.menuPanel.add(menu[1]);
+        this.panel.add(this.gp);
+        this.layout.addLayoutComponent(this.gp, "game");
 
-        this.menu[2] = new JButton("Friedrich");
-        this.menu[2].setSize(600,800/3);
-        this.menu[2].addActionListener(new MenuListener(this, MenuListener.PLAY));
-        this.menuPanel.add(menu[2]);
-
-
-        this.layout.show(this,"menu");
+        //sets the frame visible
         this.setVisible(true);
+        this.layout.show(this.panel,"menu");
+    }
+
+    public void showGame(){
+        this.layout.show(this.panel, "game");
     }
 }

@@ -23,7 +23,7 @@ public class MenuListener implements ActionListener{
                 System.out.println("Karl");
                 break;
             case PLAY:
-                System.out.println("Friedrich");
+                this.I.showGame();
                 break;
             default:
                 break;
