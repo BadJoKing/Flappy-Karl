@@ -1,9 +1,10 @@
 public class Arbeiter extends Entity {
-
-    @Override
-    public void move() {
-        // TODO Auto-generated method stub
-        
+    public Arbeiter(String path) {
+        super(path);
+        //TODO Auto-generated constructor stub
     }
+
+    
+
     
 }
