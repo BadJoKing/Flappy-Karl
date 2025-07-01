@@ -1,11 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
 import java.awt.CardLayout;
-import java.awt.FlowLayout;
-import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
+
 
 
 public class Interface extends JFrame{
@@ -19,6 +15,8 @@ public class Interface extends JFrame{
         //sets size and layout
         this.setSize(600,800);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+
         this.layout = new CardLayout();
         //creates the main panel
         this.panel = new JPanel();
@@ -48,5 +46,9 @@ public class Interface extends JFrame{
 
     public void showGame(){
         this.layout.show(this.panel, "game");
+    }
+
+    public void stopGame(){
+        this.gp.stopGameThread();
     }
 }
