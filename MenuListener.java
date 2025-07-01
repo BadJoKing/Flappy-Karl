@@ -17,7 +17,8 @@ public class MenuListener implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         switch (this.command) {
             case EXIT:
-                this.I.dispose();
+                this.I.stopGame();
+                System.exit(0);
                 break;
             case SETTINGS:
                 System.out.println("Karl");
