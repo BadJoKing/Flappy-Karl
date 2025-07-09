@@ -45,8 +45,14 @@ public class Interface extends JFrame{
     }
 
     public void showGame(){
+        
+        //shows the GamePanel
         this.layout.show(this.panel, "game");
+
+        //tells the GamePanel to start the GameThread
         this.gp.startGame();
+
+        //this requests focus for the GamePanel. It's necessary for the InputListener to work
         this.gp.requestFocus();
     }
 

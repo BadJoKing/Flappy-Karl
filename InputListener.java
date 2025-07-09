@@ -3,10 +3,10 @@ import java.awt.event.KeyListener;
 
 public class InputListener implements KeyListener{
 
-    private Arbeiter a;
+    private GameThread gt;
 
-    public InputListener(Arbeiter a){
-        this.a = a;
+    public InputListener(GameThread gt){
+        this.gt = gt;
     }
 
 
@@ -14,7 +14,7 @@ public class InputListener implements KeyListener{
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                this.a.jump();
+                this.gt.playerAction(GameThread.JUMP);
                 break;
             case KeyEvent.VK_RIGHT:
                 break;
