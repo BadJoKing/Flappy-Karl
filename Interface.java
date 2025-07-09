@@ -46,6 +46,8 @@ public class Interface extends JFrame{
 
     public void showGame(){
         this.layout.show(this.panel, "game");
+        this.gp.startGame();
+        this.gp.requestFocus();
     }
 
     public void stopGame(){

@@ -3,27 +3,27 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Toolkit;
 
 public class GamePanel extends JPanel implements Runnable{
 
-    private final int TICKS_PER_SECOND = 60;
-    private final int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
-    private final int MAX_FRAMESKIP = 10;
+    private final int FRAMERATE = 60; //specifies the desired framerate in frames per second
+    private final int SKIP_TICKS = 1000/FRAMERATE; // this is the amount of milliseconds in each frame
     private long next_game_tick = System.currentTimeMillis();
 
     private Arbeiter player;
-    private int player_y;
-    private int player_vy;
 
     private Thread GameThread;
+    private boolean running = false;
+    private long current_game_tick = 0;
+    private long last_movement_tick = 0;
 
     public GamePanel() {
         super();
         this.player = new Arbeiter("Assets/phb.png");
+        this.addKeyListener(new InputListener(this.player));
         this.GameThread = new Thread(this);
-        this.GameThread.start();
+        
     }
 
     @Override
@@ -33,7 +33,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     private void drawFrame(Graphics g){
-        g.drawImage(this.player.getImage(), 0, player_y, this);
+        g.drawImage(this.player.getImage(), 64, (int)this.player.getPosY(), this);
 
         Toolkit.getDefaultToolkit().sync();
     }
@@ -55,29 +55,26 @@ public class GamePanel extends JPanel implements Runnable{
         //     // TODO Auto-generated catch block
         //     e.printStackTrace();
         // }
-        long vtime = System.currentTimeMillis();
+        System.out.println("game started");
         while (true) {
             
-            int loops = 0;
-            while( System.currentTimeMillis() > next_game_tick && loops < MAX_FRAMESKIP) {
-                // ---- Game Code Here ----
-                //System.out.println(System.currentTimeMillis()-vtime);
-                if((System.currentTimeMillis()-vtime) >= 100){
-                    player_vy += 1;
-                    //frames = 0;
-                    vtime = System.currentTimeMillis();
-                }
-
-                player_y+=player_vy;
-                player_y %= (800-32);
-
-                next_game_tick += SKIP_TICKS;
-                loops++;
-            }
-
-            //System.out.println(x + " " + y);
-            
+            update_game();
+            //System.out.println("a");
             repaint();
+
+            
+            this.current_game_tick++;
+            
+            next_game_tick += SKIP_TICKS;// = the time that the next frame should happen at
+            int sleep_time = (int) (next_game_tick - System.currentTimeMillis());// = the time that is between now and next_game_tick
+            if( sleep_time >= 0 ) {
+                try {
+                    Thread.sleep(sleep_time); //wait for the right time for the next frame to appear.
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
             //frames++;
             // if((System.currentTimeMillis()-stime) >= 1000){
             //     System.out.println(frames/(System.currentTimeMillis()-stime));
@@ -85,6 +82,20 @@ public class GamePanel extends JPanel implements Runnable{
             //     //stime = System.currentTimeMillis();
             // }
         }
+    }
+
+    public void startGame(){
+        this.next_game_tick = System.currentTimeMillis();
+        this.GameThread.start();
+        this.setFocusable(true);
+    }
+
+    public void update_game(){
+        //System.out.println(this.current_game_tick);
+        //this if statement makes the game only update the movement every 100 ticks
+        this.player.move();
+        //System.out.println(this.player.getPosY());
+
     }
 
 }
