@@ -1,29 +1,39 @@
 import javax.swing.JPanel;
-
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Toolkit;
+import java.util.Random;
 
-public class GamePanel extends JPanel implements Runnable{
-
-    private final int TICKS_PER_SECOND = 60;
-    private final int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
-    private final int MAX_FRAMESKIP = 10;
-    private long next_game_tick = System.currentTimeMillis();
-
+public class GamePanel extends JPanel {
     private Arbeiter player;
-    private int player_y;
-    private int player_vy;
+    private Kapitalist[] firma;
 
-    private Thread GameThread;
+    private String workerPath = "Assets/player_placeholder_64.png";
+    private String capitalistPath = "Assets/placeholder_pipe_64x800.png";
 
+    private GameThread GT;
     public GamePanel() {
         super();
-        this.player = new Arbeiter("Assets/phb.png");
-        this.GameThread = new Thread(this);
-        this.GameThread.start();
+        this.player = new Arbeiter(workerPath);
+        this.firma = new Kapitalist[10];
+        int min_height = 64;
+        int cap_gap = 200;
+        int min_top_cap_y = -800+min_height;
+        int max_top_cap_y = -min_height-cap_gap;
+        int cap_distance = 500;
+        
+        Random ran = new Random();
+        for(int i = 0; i<(this.firma.length/2);i++){
+            for(int j = 0; j<2; j++){
+                this.firma[2*i] = new Kapitalist(capitalistPath);
+                this.firma[2*i].moveTo(600+(cap_distance*i),ran.nextInt(min_top_cap_y,max_top_cap_y));
+                System.out.println(this.firma[2*i].getPos()[1]);
+                this.firma[2*i+1] = new Kapitalist(capitalistPath);
+                this.firma[2*i+1].moveTo(600+(cap_distance*i), (int)this.firma[2*i].getPos()[1]+800+cap_gap);
+                System.out.println(this.firma[2*i+1].getPos()[1]);
+            }
+        }
+        this.GT = new GameThread(this, this.player, this.firma);
+        this.addKeyListener(new InputListener(this.GT));
     }
 
     @Override
@@ -33,58 +43,23 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     private void drawFrame(Graphics g){
-        g.drawImage(this.player.getImage(), 0, player_y, this);
+        
+        for(Kapitalist k: firma){
+            g.drawImage(k.getImage(), (int)k.getPos()[0], (int)k.getPos()[1], this);
+        }
+        g.drawImage(this.player.getImage(), 64, (int)this.player.getPosY(), this);
 
         Toolkit.getDefaultToolkit().sync();
     }
 
     public void stopGameThread(){
         System.out.println("stopping Game");
-        this.GameThread.interrupt();
+        this.GT.interrupt();
     }
 
-    @Override
-    public void run() {
-        this.setBackground(Color.BLACK);
-        this.setPreferredSize(new Dimension(600,800));
-        // int frames = 0;
-        // long stime = System.currentTimeMillis();
-        // try {
-        //     Thread.sleep(1);
-        // } catch (InterruptedException e) {
-        //     // TODO Auto-generated catch block
-        //     e.printStackTrace();
-        // }
-        long vtime = System.currentTimeMillis();
-        while (true) {
-            
-            int loops = 0;
-            while( System.currentTimeMillis() > next_game_tick && loops < MAX_FRAMESKIP) {
-                // ---- Game Code Here ----
-                //System.out.println(System.currentTimeMillis()-vtime);
-                if((System.currentTimeMillis()-vtime) >= 100){
-                    player_vy += 1;
-                    //frames = 0;
-                    vtime = System.currentTimeMillis();
-                }
-
-                player_y+=player_vy;
-                player_y %= (800-32);
-
-                next_game_tick += SKIP_TICKS;
-                loops++;
-            }
-
-            //System.out.println(x + " " + y);
-            
-            repaint();
-            //frames++;
-            // if((System.currentTimeMillis()-stime) >= 1000){
-            //     System.out.println(frames/(System.currentTimeMillis()-stime));
-            //     //frames = 0;
-            //     //stime = System.currentTimeMillis();
-            // }
-        }
+    public void startGame(){
+        this.GT.start();
+        this.setFocusable(true);
     }
 
 }
