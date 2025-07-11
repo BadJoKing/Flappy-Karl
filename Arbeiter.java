@@ -1,6 +1,8 @@
 public class Arbeiter extends Entity {
+    private Bullet bullet;
     public Arbeiter(String path) {
         super(path);
+        this.bullet = new Bullet("Assets/phb.png", this.getPos());
     }
 
     public void move(){

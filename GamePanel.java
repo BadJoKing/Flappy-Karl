@@ -43,6 +43,7 @@ public class GamePanel extends JPanel {
     }
 
     private void drawFrame(Graphics g){
+        
         for(Kapitalist k: firma){
             g.drawImage(k.getImage(), (int)k.getPos()[0], (int)k.getPos()[1], this);
         }
