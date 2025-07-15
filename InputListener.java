@@ -17,6 +17,7 @@ public class InputListener implements KeyListener{
                 this.gt.playerAction(GameThread.JUMP);
                 break;
             case KeyEvent.VK_RIGHT:
+                this.gt.playerAction(GameThread.ATK_01);
                 break;
             
             default:

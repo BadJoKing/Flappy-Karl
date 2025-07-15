@@ -1,3 +1,4 @@
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Toolkit;
@@ -6,14 +7,23 @@ import java.util.Random;
 public class GamePanel extends JPanel {
     private Arbeiter player;
     private Kapitalist[] firma;
+    private ImageIcon background;
 
     private String workerPath = "Assets/player_placeholder_64.png";
+    private String workerFlapPath = "Assets/player_flap.png";
     private String capitalistPath = "Assets/placeholder_pipe_64x800.png";
+    private String backgroundPath = "Assets/background.gif";
 
     private GameThread GT;
+
+    private int score = 0;
     public GamePanel() {
         super();
-        this.player = new Arbeiter(workerPath);
+        this.background = new ImageIcon(backgroundPath);
+
+        this.player = new Arbeiter(workerPath, workerFlapPath);
+
+
         this.firma = new Kapitalist[10];
         int min_height = 64;
         int cap_gap = 200;
@@ -43,12 +53,13 @@ public class GamePanel extends JPanel {
     }
 
     private void drawFrame(Graphics g){
-        
+        g.drawImage(this.background.getImage(),0,0,this);
         for(Kapitalist k: firma){
             g.drawImage(k.getImage(), (int)k.getPos()[0], (int)k.getPos()[1], this);
         }
+        g.drawImage(this.player.getBulletImg(), (int)this.player.getBulletPos()[0], (int)this.player.getBulletPos()[1], this);
         g.drawImage(this.player.getImage(), 64, (int)this.player.getPosY(), this);
-
+        g.drawChars(Integer.toString(this.score).toCharArray(), 0, Integer.toString(this.score).toCharArray().length, 0,0);
         Toolkit.getDefaultToolkit().sync();
     }
 
@@ -60,6 +71,11 @@ public class GamePanel extends JPanel {
     public void startGame(){
         this.GT.start();
         this.setFocusable(true);
+    }
+
+    public void score(){
+        this.score++;
+        System.out.println(this.score);
     }
 
 }

@@ -9,12 +9,12 @@ public class Entity extends ImageIcon{
     }
 
     
-    public void moveTo(int x, int y){
+    public void moveTo(double x, double y){
         this.x = x;
         this.y = y;
     }
 
-    public void moveBy(int dx,int dy){
+    public void moveBy(double dx,double dy){
         this.x += dx;
         this.y += dy;
     }

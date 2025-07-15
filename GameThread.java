@@ -27,9 +27,6 @@ public class GameThread extends Thread{
     private int max_top_cap_y = -min_height-cap_gap; //maximum y-coordinate for the bottom capitalist
     private int cap_space = 500;
 
-
-
-    private int score;
     private byte score_ticks;
 
 
@@ -38,12 +35,11 @@ public class GameThread extends Thread{
         this.display = display;
         this.player = player;
         this.firma = firma;
-        this.score = 0;
     }
 
     @Override
     public void run() {
-        //this.display.setBackground(Color.BLACK);
+        this.display.setBackground(Color.BLACK);
         this.display.setPreferredSize(new Dimension(600,800));
         // int frames = 0;
         // long stime = System.currentTimeMillis();
@@ -54,6 +50,7 @@ public class GameThread extends Thread{
         //     e.printStackTrace();
         // }
         this.player.moveTo(64, (800-this.player.getIconHeight())/2);
+        System.out.println("a");
         while (true) {
             while (!this.running) {
                 try {
@@ -101,8 +98,9 @@ public class GameThread extends Thread{
             this.running = false;
             System.exit(0);
         }
-        this.player.move();
         this.update_capitalists();
+        this.player.move();
+
 
         this.score_ticks++;
         //System.out.println(this.player.getPosY());
@@ -124,6 +122,7 @@ public class GameThread extends Thread{
                 this.player.jump();
                 break;
             case ATK_01:
+                this.player.shoot();
                 break;
             case LOSE:
                 this.interrupt();
@@ -151,15 +150,16 @@ public class GameThread extends Thread{
             Kapitalist k = this.firma[2*i];
             //every 100 ticks, check if the worker passed by a capitalist
             if ((this.score_ticks >= 100)&&((k.getPos()[0]+k.getIconWidth())<=this.player.getPosX())) {
-                this.score++;
+                this.display.score();
                 this.score_ticks = 0;
-                System.out.println(this.score);
             }
             //collision of player and capitalist
             if( 
                 //if the player's rightmost edge is greater than the capitalist's leftmost edge
                 ((this.player.getPosX()+this.player.getIconWidth()) >= k.getPos()[0])
+                //AND
                 &&(
+                    //the player is 
                     (this.player.getPosY() <= (k.getPos()[1]+800))
                     || ((this.player.getPosY()+this.player.getIconHeight())>= k.getPos()[1]+800+cap_gap)
                 )
@@ -168,10 +168,6 @@ public class GameThread extends Thread{
                 System.exit(0);
             }
         }
-
-    }
-
-    public void update_bullets(){
 
     }
 
