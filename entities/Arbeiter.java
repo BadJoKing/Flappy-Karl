@@ -3,6 +3,8 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+import controller.Constants;
+
 public class Arbeiter extends Entity {
     private Bullet bullet;
     private String flapPath;
@@ -10,7 +12,7 @@ public class Arbeiter extends Entity {
     public Arbeiter(String path, String flapPath) {
         super(path);
         this.path = path;
-        this.bullet = new Bullet("Assets/phb.png", this.getPos(), this.getSize());
+        this.bullet = new Bullet(Constants.bulletPath, this.getPos(), this.getSize());
         this.flapPath = flapPath;
     }
 
@@ -48,6 +50,10 @@ public class Arbeiter extends Entity {
         this.bullet.shoot();
     }
     
+    public Bullet getBullet(){
+        return this.bullet;
+    }
+
     public Image getBulletImg(){
         return this.bullet.getImage();
     }

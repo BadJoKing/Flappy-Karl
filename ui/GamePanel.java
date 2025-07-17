@@ -38,8 +38,14 @@ public class GamePanel extends JPanel {
 
     private void drawFrame(Graphics g){
         g.drawImage(this.background.getImage(),0,0,this);
-        for(Kapitalist k: partei.getFirma()){
+        for(Kapitalist k: partei.getTopCaps()){
             g.drawImage(k.getImage(), (int)k.getPos()[0], (int)k.getPos()[1], this);
+        }
+        for(Kapitalist k: partei.getBotCaps()){
+            g.drawImage(k.getImage(), (int)k.getPos()[0], (int)k.getPos()[1], this);
+        }
+        for(Kapitalist b: partei.getBarricades()){
+            g.drawImage(b.getImage(), (int)b.getPos()[0], (int)b.getPos()[1], this);
         }
         
 

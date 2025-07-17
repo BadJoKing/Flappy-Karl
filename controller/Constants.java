@@ -6,6 +6,8 @@ public class Constants {
     public static final String workerFlapPath = "Assets/Arbeiterhüpf-scaled.png";
     public static final String capitalistPath = "Assets/Stacheldrahtbessa-scaled.png";
     public static final String backgroundPath = "Assets/background.gif";
+    public static final String barricadePath = "Assets/Barrikaden-scaled.png";
+    public static final String bulletPath = "Assets/Fellball.png";
 
     //---player actions---
     //-- NOTE: changing these doesn't actually do anything, because everything that uses these just refers to the variable and not to the actual value

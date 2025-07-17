@@ -13,8 +13,9 @@ import ui.Interface;
 public class Controller {
     // Game objects
     private Arbeiter worker = new Arbeiter(Constants.workerPath, Constants.workerFlapPath);
-    private Kapitalist[] firma = new Kapitalist[10];
-
+    private Kapitalist[] top_caps = new Kapitalist[5];
+    private Kapitalist[] bot_caps = new Kapitalist[5];
+    private Kapitalist[] barricades = new Kapitalist[5];
 
     //other objects
     private GamePanel gp;
@@ -24,14 +25,18 @@ public class Controller {
         
         
         Random ran = new Random();
-        for(int i = 0; i<(this.firma.length/2);i++){
+        for(int i = 0; i<(this.top_caps.length);i++){
             for(int j = 0; j<2; j++){
-                this.firma[2*i] = new Kapitalist(Constants.capitalistPath);
-                this.firma[2*i].moveTo(600+(Constants.cap_distance*i),ran.nextInt(Constants.min_top_cap_y,Constants.max_top_cap_y));
-                System.out.println(this.firma[2*i].getPos()[1]);
-                this.firma[2*i+1] = new Kapitalist(Constants.capitalistPath);
-                this.firma[2*i+1].moveTo(600+(Constants.cap_distance*i), (int)this.firma[2*i].getPos()[1]+800+Constants.cap_gap);
-                System.out.println(this.firma[2*i+1].getPos()[1]);
+                this.top_caps[i] = new Kapitalist(Constants.capitalistPath);
+                this.top_caps[i].moveTo(600+(Constants.cap_distance*i),ran.nextInt(Constants.min_top_cap_y,Constants.max_top_cap_y));
+                //System.out.println(this.top_caps[i].getPos()[1]);
+
+                this.bot_caps[i] = new Kapitalist(Constants.capitalistPath);
+                this.bot_caps[i].moveTo(600+(Constants.cap_distance*i), (int)this.top_caps[i].getPos()[1]+800+Constants.cap_gap);
+                //System.out.println(this.bot_caps[i].getPos()[1]);
+
+                this.barricades[i] = new Kapitalist(Constants.barricadePath);
+                this.barricades[i].moveTo(-200, 0);
             }
         }
 
@@ -54,8 +59,12 @@ public class Controller {
 
 
     //----Getters----
-    public Kapitalist[] getFirma(){
-        return this.firma;
+    public Kapitalist[] getTopCaps(){
+        return this.top_caps;
+    }
+
+    public Kapitalist[] getBotCaps(){
+        return this.bot_caps;
     }
 
     public Arbeiter getWorker(){
@@ -64,6 +73,10 @@ public class Controller {
 
     public GamePanel getGamePanel(){
         return this.gp;
+    }
+
+    public Kapitalist[] getBarricades(){
+        return this.barricades;
     }
 
     /**
