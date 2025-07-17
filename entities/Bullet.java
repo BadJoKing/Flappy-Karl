@@ -1,3 +1,4 @@
+package entities;
 public class Bullet extends Entity{
 
     private double x,y;

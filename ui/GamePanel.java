@@ -1,8 +1,14 @@
+package ui;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
+import entities.Arbeiter;
+import entities.Kapitalist;
+
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.util.Random;
+import backend.GameThread;
 
 public class GamePanel extends JPanel {
     private Arbeiter player;

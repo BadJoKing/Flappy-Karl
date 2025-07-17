@@ -1,6 +1,11 @@
+package backend;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Random;
+
+import entities.Arbeiter;
+import entities.Kapitalist;
+import ui.GamePanel;
 
 public class GameThread extends Thread{
     public static final int JUMP = 0; // the 'action code' for jumping
@@ -114,7 +119,10 @@ public class GameThread extends Thread{
 
     }
 
-
+    /**
+     * Does whatever the InputListener tells it to do
+     * @param action an integer that determines what the player should do.
+     */
     public void playerAction(int action){
         if(!running) running = true;
         switch (action) {
@@ -133,35 +141,53 @@ public class GameThread extends Thread{
         }
     }
 
+
+    /**
+     * handles the capitalists' movement and collision with the player
+     */
     private void update_capitalists(){
         Random ran = new Random();
+        //iterate through every second index of the firma
         for(int i = 0; i<(this.firma.length/2); i++){
-            if(this.firma[2*i].getPos()[0] <= -32){
-                this.firma[2*i].moveBy((this.firma.length/2)*cap_space,0);
-                this.firma[2*i].moveTo((int)this.firma[2*i].getPos()[0], ran.nextInt(min_top_cap_y, max_top_cap_y));
-
-                this.firma[2*i+1].moveTo((int)this.firma[2*i].getPos()[0], (int)this.firma[2*i].getPos()[1]+800+cap_gap);
+            Kapitalist k = this.firma[2*i];
+            //if the i-th top capitalist is completely off the left side of the screen
+            if(k.getPos()[0] <= -k.getIconWidth()){
+                //move the i-th top capitalist i spaces to the right
+                k.moveBy((this.firma.length/2)*cap_space,0);
+                //put the new gap at a random height
+                k.moveTo((int)k.getPos()[0], ran.nextInt(min_top_cap_y, max_top_cap_y));
+                //move the corresponding i-th bottom capitalist to the same
+                //x-position as the top capitalist and then adjust the y-position
+                //to keep the gap size at cap_gap
+                this.firma[2*i+1].moveTo((int)k.getPos()[0], (int)k.getPos()[1]+800+cap_gap);
             }
-            this.firma[2*i].moveBy(-cap_speed,0);
+            k.moveBy(-cap_speed,0);
             this.firma[2*i+1].moveBy(-cap_speed,0);
         }
 
         for (int i = 0; i<(this.firma.length/2); i++) {
             Kapitalist k = this.firma[2*i];
+            double[] kPos = k.getPos();
+
+            double playerPosX = this.player.getPosX();
+            double playerPosY = this.player.getPosY();
             //every 100 ticks, check if the worker passed by a capitalist
-            if ((this.score_ticks >= 100)&&((k.getPos()[0]+k.getIconWidth())<=this.player.getPosX())) {
+            if ((this.score_ticks >= 100)&&((kPos[0]+k.getIconWidth())<=playerPosX)) {
                 this.display.score();
                 this.score_ticks = 0;
             }
             //collision of player and capitalist
             if( 
                 //if the player's rightmost edge is greater than the capitalist's leftmost edge
-                ((this.player.getPosX()+this.player.getIconWidth()) >= k.getPos()[0])
+                ((playerPosX+this.player.getIconWidth()) >= kPos[0])
                 //AND
                 &&(
-                    //the player is 
-                    (this.player.getPosY() <= (k.getPos()[1]+800))
-                    || ((this.player.getPosY()+this.player.getIconHeight())>= k.getPos()[1]+800+cap_gap)
+                    //the player is below the bottom edge of the top capitalist
+                    (playerPosY <= (kPos[1]+800))
+                    //OR
+                    ||
+                    //the player's bottom edge is below the bottom capitalist's top edge
+                    ((playerPosY+this.player.getIconHeight())>= kPos[1]+800+cap_gap)
                 )
             ){
                 System.out.println("collision");

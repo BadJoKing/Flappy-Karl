@@ -1,3 +1,4 @@
+package entities;
 import javax.swing.ImageIcon;
 
 public class Entity extends ImageIcon{

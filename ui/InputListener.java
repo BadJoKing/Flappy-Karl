@@ -1,5 +1,8 @@
+package ui;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import backend.GameThread;
 
 public class InputListener implements KeyListener{
 
