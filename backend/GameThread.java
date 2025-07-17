@@ -1,5 +1,5 @@
 package backend;
-import java.awt.Color;
+
 import java.awt.Dimension;
 import java.util.Random;
 
@@ -53,7 +53,6 @@ public class GameThread extends Thread{
         // try {
         //     Thread.sleep(1);
         // } catch (InterruptedException e) {
-        //     // TODO Auto-generated catch block
         //     e.printStackTrace();
         // }
         this.partei.resetWorker();
@@ -63,7 +62,6 @@ public class GameThread extends Thread{
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -80,7 +78,6 @@ public class GameThread extends Thread{
                     try {
                         Thread.sleep(sleep_time); //wait for the right time for the next frame to appear.
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
                         //e.printStackTrace();
                     }
                 }

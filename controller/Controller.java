@@ -1,6 +1,5 @@
 package controller;
 
-import java.awt.Image;
 import java.util.Random;
 
 import backend.GameThread;
