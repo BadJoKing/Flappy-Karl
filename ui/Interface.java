@@ -1,11 +1,17 @@
 package ui;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import controller.Controller;
 
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.File;
+import java.io.IOException;
 
 
 
@@ -15,12 +21,14 @@ public class Interface extends JFrame{
     private GamePanel gp;
     private CardLayout layout;
     private Controller partei;
+    private JPanel aboutPanel;
+    private JLabel aboutLabel;
 
-    public Interface(Controller partei, GamePanel gp) {
+    public Interface(Controller partei, GamePanel gp, InputListener il) {
         super();
         //establishes the local party 
         this.partei = partei;
-        
+
         //sets size and layout
         this.setSize(600,800);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,6 +44,8 @@ public class Interface extends JFrame{
 
         //creates the MenuPanel
         this.mp = new MenuPanel(this);
+        this.mp.setFocusable(true);
+        this.mp.addKeyListener(il);
 
         //adds the MenuPanel to the main Panel
         this.panel.add(this.mp);
@@ -44,10 +54,31 @@ public class Interface extends JFrame{
         
         //creates the GamePanel
         this.gp = gp;
+        this.gp.setFocusable(true);
+        this.gp.addKeyListener(il);
 
-        
         this.panel.add(this.gp);
         this.layout.addLayoutComponent(this.gp, "game");
+
+        this.aboutLabel = new JLabel("<html>Ein Spiel von<br/>Beni Antesberger<br/>Nox Kircher<br/>Felix Schmid-Burgk");
+        this.aboutLabel.setSize(600,800);
+        try {
+            this.aboutLabel.setFont(Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Anarchaos.otf")).deriveFont(60f));
+        } catch (FontFormatException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        this.aboutLabel.setForeground(new Color(1f, 1f, 0f, 1f));
+        
+
+        this.aboutPanel = new JPanel();
+        this.aboutPanel.add(this.aboutLabel);
+        this.aboutPanel.setFocusable(true);
+        this.aboutPanel.addKeyListener(il);
+
+        this.aboutPanel.setBackground(new Color(0.7f, 0.0f, 0.0f, 1.0f));
+        this.panel.add(this.aboutPanel);
+        this.layout.addLayoutComponent(this.aboutPanel, "about");
 
         //sets the frame visible
         this.setVisible(true);
@@ -65,4 +96,15 @@ public class Interface extends JFrame{
     public void stopGame(){
         this.gp.stopGameThread();
     }
+
+    public void showMenu(){
+        this.layout.show(this.panel, "menu");
+        this.mp.requestFocus();
+    }
+
+    public void showAbout(){
+        this.layout.show(this.panel, "about");
+        this.aboutPanel.requestFocus();
+    }
+    
 }

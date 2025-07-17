@@ -25,7 +25,7 @@ public class Bullet extends Entity{
         if(!shooting){
             this.reload(workerPos, workerSize);
         } else {
-            this.x += 5;
+            this.x += 10;
         }
     }
 

@@ -47,9 +47,7 @@ public class MenuPanel extends JPanel {
         }
 
         /*
-         * Erstellt 3 Knöpfe (Namen sind noch Platzhalter)
-         * der erste Knopf beendet das Programm, der Zweite öffnet die
-         * Einstellungen und der Dritte startet das Spiel.
+         * Erstellt 3 Knöpfe
          */
 
         this.setLayout(null);
@@ -60,7 +58,7 @@ public class MenuPanel extends JPanel {
         this.menu[0].setBounds(265, 600, 70, 40);
         this.add(menu[0]);
 
-        this.menu[1] = new JButton("Settings");
+        this.menu[1] = new JButton("Über");
         this.menu[1].addActionListener(new MenuListener(this.parent, MenuListener.SETTINGS));
         this.menu[1].setBounds(245, 380, 110, 40);
         this.add(menu[1]);

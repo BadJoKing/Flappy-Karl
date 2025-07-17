@@ -1,12 +1,18 @@
 package ui;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import entities.Arbeiter;
 import entities.Kapitalist;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
+
 import backend.GameThread;
 import controller.Constants;
 import controller.Controller;
@@ -23,11 +29,21 @@ public class GamePanel extends JPanel {
 
     private Arbeiter worker;
 
+    private JLabel scoreLabel;
+
     public GamePanel(Controller partei) {
         super();
         this.background = new ImageIcon(Constants.backgroundPath);
         this.partei = partei;
         this.worker = this.partei.getWorker();
+        this.scoreLabel = new JLabel(Integer.toString(this.score));
+        try {
+            this.scoreLabel.setFont(Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Anarchaos.otf")).deriveFont(40f));
+        } catch (FontFormatException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        this.add(this.scoreLabel);
     }
 
     @Override
@@ -56,13 +72,17 @@ public class GamePanel extends JPanel {
     }
 
     public void stopGameThread(){
-        System.out.println("stopping Game");
+        //System.out.println("stopping Game");
         this.GT.interrupt();
     }
 
     public void score(){
         this.score++;
-        System.out.println(this.score);
+        this.scoreLabel.setText(Integer.toString(this.score));
     }
 
+    public void resetScore(){
+        this.score = 0;
+        this.scoreLabel.setText(Integer.toString(this.score));
+    }
 }

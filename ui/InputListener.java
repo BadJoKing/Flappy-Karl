@@ -16,6 +16,7 @@ public class InputListener implements KeyListener{
 
     @Override
     public void keyPressed(KeyEvent e) {
+        //System.out.println("a");
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
                 this.partei.workerAction(Constants.JUMP);
@@ -23,7 +24,8 @@ public class InputListener implements KeyListener{
             case KeyEvent.VK_RIGHT:
                 this.partei.workerAction(Constants.ATK_01);
                 break;
-            
+            case KeyEvent.VK_ESCAPE:
+                this.partei.showMenu();
             default:
                 break;
         }
@@ -37,5 +39,7 @@ public class InputListener implements KeyListener{
     @Override
     public void keyTyped(KeyEvent e) {
     }
+    
+
     
 }

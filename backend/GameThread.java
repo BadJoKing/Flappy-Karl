@@ -56,7 +56,7 @@ public class GameThread extends Thread{
         //     e.printStackTrace();
         // }
         this.partei.resetWorker();
-        System.out.println("a");
+        //System.out.println("a");
         while (true) {
             while (!this.running) {
                 try {
@@ -100,7 +100,7 @@ public class GameThread extends Thread{
         //this if statement makes the game only update the movement every 100 ticks
         if((this.worker.getPosY() >= (800-this.worker.getIconHeight())) || (this.worker.getPosY() <= -10)){
             this.running = false;
-            System.exit(0);
+            this.partei.workerAction(Constants.LOSE);
         }
         this.update_capitalists();
         this.worker.move();
@@ -166,7 +166,7 @@ public class GameThread extends Thread{
                 //to the right of the leftmost edge of the barricade
                 ((this.bullet.getPos()[0]+this.bullet.getIconWidth())>=barricades[i].getPos()[0])
             ){//then set the barricade to non-moving and move the barricade off the screen
-                System.out.println("bullet collision");
+                //System.out.println("bullet collision");
                 this.move_bar[i] = false;
                 this.barricades[i].moveTo(-200,0);
             }
@@ -207,7 +207,7 @@ public class GameThread extends Thread{
                     ((this.move_bar[i])&&((workerPosX+this.worker.getIconWidth())>=this.barricades[i].getPos()[0]))
                 )
             ){//then the player is colliding with a barrier or a capitalist and loses
-                System.out.println("collision");
+                //System.out.println("collision");
                 this.partei.workerAction(Constants.LOSE);
             }
             

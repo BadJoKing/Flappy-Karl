@@ -18,11 +18,10 @@ public class MenuListener implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         switch (this.command) {
             case EXIT:
-                this.I.stopGame(); //probably not necessary, but added this just in case
                 System.exit(0);
                 break;
             case SETTINGS:
-                System.out.println("Karl");
+                this.I.showAbout();
                 break;
             case PLAY:
                 this.I.showGame();

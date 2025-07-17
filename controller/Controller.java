@@ -19,31 +19,20 @@ public class Controller {
     //other objects
     private GamePanel gp;
     private GameThread gt;
-
+    private InputListener iListener;
+    private Interface iface;
     public Controller() {
         
         
-        Random ran = new Random();
-        for(int i = 0; i<(this.top_caps.length);i++){
-            for(int j = 0; j<2; j++){
-                this.top_caps[i] = new Kapitalist(Constants.capitalistPath);
-                this.top_caps[i].moveTo(600+(Constants.cap_distance*i),ran.nextInt(Constants.min_top_cap_y,Constants.max_top_cap_y));
-                //System.out.println(this.top_caps[i].getPos()[1]);
-
-                this.bot_caps[i] = new Kapitalist(Constants.capitalistPath);
-                this.bot_caps[i].moveTo(600+(Constants.cap_distance*i), (int)this.top_caps[i].getPos()[1]+800+Constants.cap_gap);
-                //System.out.println(this.bot_caps[i].getPos()[1]);
-
-                this.barricades[i] = new Kapitalist(Constants.barricadePath);
-                this.barricades[i].moveTo(-200, 0);
-            }
-        }
+        this.resetCapitalists();
 
         this.gp = new GamePanel(this);
         this.gt = new GameThread(this);
-        this.gp.addKeyListener(new InputListener(this));
+        this.iListener = new InputListener(this);
+        this.gp.addKeyListener(this.iListener);
+        this.iface = new Interface(this, this.gp, this.iListener);
 
-        new Interface(this, this.gp);
+        
     }
 
 
@@ -93,7 +82,11 @@ public class Controller {
                 break;
             case Constants.LOSE:
                 this.gt.interrupt();
-                System.exit(0);
+                this.gt = new GameThread(this);
+                this.resetWorker();
+                this.gp.resetScore();
+                this.resetCapitalists();
+                this.iface.showMenu();
                 break;
             default:
                 break;
@@ -104,4 +97,25 @@ public class Controller {
         this.worker.moveTo(64, (800-this.worker.getIconHeight())/2);
     }
 
+    public void showMenu(){
+        this.iface.showMenu();
+    }
+
+    public void resetCapitalists(){
+        Random ran = new Random();
+        for(int i = 0; i<(this.top_caps.length);i++){
+            for(int j = 0; j<2; j++){
+                this.top_caps[i] = new Kapitalist(Constants.capitalistPath);
+                this.top_caps[i].moveTo(600+(Constants.cap_distance*i),ran.nextInt(Constants.min_top_cap_y,Constants.max_top_cap_y));
+                //System.out.println(this.top_caps[i].getPos()[1]);
+
+                this.bot_caps[i] = new Kapitalist(Constants.capitalistPath);
+                this.bot_caps[i].moveTo(600+(Constants.cap_distance*i), (int)this.top_caps[i].getPos()[1]+800+Constants.cap_gap);
+                //System.out.println(this.bot_caps[i].getPos()[1]);
+
+                this.barricades[i] = new Kapitalist(Constants.barricadePath);
+                this.barricades[i].moveTo(-200, 0);
+            }
+        }
+    }
 }

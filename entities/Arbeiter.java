@@ -32,9 +32,8 @@ public class Arbeiter extends Entity {
         this.vy += 2; //downwards acceleration of 5px/frame
     }
 
-    //
     public void jump(){
-        System.out.println("jump");
+        //System.out.println("jump");
         this.setSpeed(0, -40);
     }
 
