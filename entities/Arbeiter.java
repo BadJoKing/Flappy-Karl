@@ -10,7 +10,7 @@ public class Arbeiter extends Entity {
     public Arbeiter(String path, String flapPath) {
         super(path);
         this.path = path;
-        this.bullet = new Bullet("Assets/phb.png", this.getPos());
+        this.bullet = new Bullet("Assets/phb.png", this.getPos(), this.getSize());
         this.flapPath = flapPath;
     }
 
@@ -22,7 +22,7 @@ public class Arbeiter extends Entity {
         } else {
             this.setImage(new ImageIcon(this.path).getImage());
         }
-        this.bullet.move(this.getPos());
+        this.bullet.move(this.getPos(), this.getSize());
 
     }
 
@@ -59,6 +59,10 @@ public class Arbeiter extends Entity {
     @Override
     public void moveTo(double x, double y){
         super.moveTo(x,y);
-        this.bullet.reload(this.getPos());
+        this.bullet.reload(this.getPos(), this.getSize());
+    }
+
+    public int[] getSize(){
+        return new int[] {this.getIconWidth(), this.getIconHeight()};
     }
 }

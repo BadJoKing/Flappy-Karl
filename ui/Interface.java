@@ -2,6 +2,9 @@ package ui;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import controller.Controller;
+
 import java.awt.CardLayout;
 
 
@@ -11,9 +14,13 @@ public class Interface extends JFrame{
     private MenuPanel mp;
     private GamePanel gp;
     private CardLayout layout;
+    private Controller partei;
 
-    public Interface() {
+    public Interface(Controller partei, GamePanel gp) {
         super();
+        //establishes the local party 
+        this.partei = partei;
+        
         //sets size and layout
         this.setSize(600,800);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,7 +43,8 @@ public class Interface extends JFrame{
         this.layout.addLayoutComponent(this.mp, "menu");
         
         //creates the GamePanel
-        this.gp = new GamePanel();
+        this.gp = gp;
+
         
         this.panel.add(this.gp);
         this.layout.addLayoutComponent(this.gp, "game");
@@ -50,12 +58,8 @@ public class Interface extends JFrame{
         
         //shows the GamePanel
         this.layout.show(this.panel, "game");
+        this.partei.startGame();
 
-        //tells the GamePanel to start the GameThread
-        this.gp.startGame();
-
-        //this requests focus for the GamePanel. It's necessary for the InputListener to work
-        this.gp.requestFocus();
     }
 
     public void stopGame(){

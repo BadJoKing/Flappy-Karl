@@ -3,13 +3,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import backend.GameThread;
+import controller.Constants;
+import controller.Controller;
 
 public class InputListener implements KeyListener{
 
-    private GameThread gt;
+    private Controller partei;
 
-    public InputListener(GameThread gt){
-        this.gt = gt;
+    public InputListener(Controller partei){
+        this.partei = partei;
     }
 
 
@@ -17,10 +19,10 @@ public class InputListener implements KeyListener{
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                this.gt.playerAction(GameThread.JUMP);
+                this.partei.workerAction(Constants.JUMP);
                 break;
             case KeyEvent.VK_RIGHT:
-                this.gt.playerAction(GameThread.ATK_01);
+                this.partei.workerAction(Constants.ATK_01);
                 break;
             
             default:
