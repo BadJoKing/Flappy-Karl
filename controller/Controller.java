@@ -81,6 +81,12 @@ public class Controller {
                 this.worker.shoot();
                 break;
             case Constants.LOSE:
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
                 this.gt.interrupt();
                 this.gt = new GameThread(this);
                 this.resetWorker();
