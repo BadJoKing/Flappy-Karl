@@ -1,15 +1,21 @@
 package entities;
+
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
+
+import controller.Constants;
+
 public class Bullet extends Entity{
 
     private double x,y;
-
-
 
     private boolean shooting;
 
     public Bullet(String path, double[] workerPos, int[] workerSize) {
         super(path);
         this.reload(workerPos, workerSize);
+        this.setImage(new ImageIcon(path).getImage().getScaledInstance((int)Math.floor(Constants.bullet_width*Constants.bullet_scale), (int)Math.floor(Constants.bullet_height*Constants.bullet_scale), Image.SCALE_DEFAULT));
     }
 
     public void shoot(){
@@ -38,4 +44,8 @@ public class Bullet extends Entity{
         return new double[] {this.x, this.y};
     }
     
+    public boolean shooting(){
+        return this.shooting;
+    }
+
 }

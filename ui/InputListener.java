@@ -25,6 +25,7 @@ public class InputListener implements KeyListener{
                 this.partei.workerAction(Constants.ATK_01);
                 break;
             case KeyEvent.VK_ESCAPE:
+                this.partei.pauseGame();
                 this.partei.showMenu();
             default:
                 break;

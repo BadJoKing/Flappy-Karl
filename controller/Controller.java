@@ -4,6 +4,7 @@ import java.util.Random;
 
 import backend.GameThread;
 import entities.Arbeiter;
+import entities.Background;
 import entities.Kapitalist;
 import ui.GamePanel;
 import ui.InputListener;
@@ -15,6 +16,7 @@ public class Controller {
     private Kapitalist[] top_caps = new Kapitalist[5];
     private Kapitalist[] bot_caps = new Kapitalist[5];
     private Kapitalist[] barricades = new Kapitalist[5];
+    private Background[] bgs = new Background[2];
 
     //other objects
     private GamePanel gp;
@@ -32,6 +34,11 @@ public class Controller {
         this.gp.addKeyListener(this.iListener);
         this.iface = new Interface(this, this.gp, this.iListener);
 
+        for(int i = 0; i<2; i++){
+            bgs[i] = new Background(Constants.backgroundPath);
+            bgs[i].setOffset(i);
+            bgs[i].reset();
+        }
         
     }
 
@@ -65,6 +72,10 @@ public class Controller {
 
     public Kapitalist[] getBarricades(){
         return this.barricades;
+    }
+
+    public Background[] getBGS(){
+        return this.bgs;
     }
 
     /**
@@ -123,5 +134,9 @@ public class Controller {
                 this.barricades[i].moveTo(-200, 0);
             }
         }
+    }
+
+    public void pauseGame(){
+        this.gt.pauseGame();
     }
 }

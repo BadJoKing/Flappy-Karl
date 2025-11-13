@@ -9,6 +9,7 @@ import entities.Kapitalist;
 import ui.GamePanel;
 import controller.Constants;
 import controller.Controller;
+import entities.Background;
 
 public class GameThread extends Thread{
     private final int SKIP_TICKS = 1000/Constants.FRAMERATE; // this is the amount of milliseconds in each frame
@@ -24,6 +25,7 @@ public class GameThread extends Thread{
     private Kapitalist[] barricades;
     private boolean[] move_bar = new boolean[5];
     private Bullet bullet;
+    private Background[] bgs;
 
     private byte score_ticks;
 
@@ -34,12 +36,14 @@ public class GameThread extends Thread{
     public GameThread(Controller partei) {
         super();
         this.partei = partei;
+        this.bgs = partei.getBGS();
         this.display = partei.getGamePanel();
         this.worker = partei.getWorker();
         this.top_caps = partei.getTopCaps();
         this.bot_caps = partei.getBotCaps();
         this.barricades = partei.getBarricades();
         this.bullet = this.worker.getBullet();
+        this.running = false;
         for(boolean i: move_bar){
             i = false;
         }
@@ -66,7 +70,7 @@ public class GameThread extends Thread{
                 }
             }
             this.next_game_tick = System.currentTimeMillis();
-            while (running) {
+            while (true) {
                 
                 update_game();
                 //System.out.println("a");
@@ -96,9 +100,10 @@ public class GameThread extends Thread{
      * updates the game state
      */
     public void update_game(){
+        this.update_bgs();
         //System.out.println(this.current_game_tick);
         //this if statement makes the game only update the movement every 100 ticks
-        if((this.worker.getPosY() >= (800-this.worker.getIconHeight())) || (this.worker.getPosY() <= -10)){
+        if((this.worker.getPosY() >= (800-Constants.player_height)) || (this.worker.getPosY() <= -10)){
             this.running = false;
             this.partei.workerAction(Constants.LOSE);
         }
@@ -120,11 +125,19 @@ public class GameThread extends Thread{
 
     
 
+    private void update_bgs(){
+        for(Background i: this.bgs){
+            i.move();
+        }
+    }
 
     /**
      * handles the capitalists' movement and collision with the worker
      */
     private void update_capitalists(){
+        if(!running){
+            return;
+        }
         Random ran = new Random();
         //iterate through every capitalist
         for(int i = 0; i<(this.top_caps.length); i++){
@@ -136,9 +149,9 @@ public class GameThread extends Thread{
                 //put the new gap at a random height
                 k.moveTo((int)k.getPos()[0], ran.nextInt(Constants.min_top_cap_y, Constants.max_top_cap_y));
 
-                //move a barricade to its corresponding capitalist with a one in 5 chance
+                //move a barricade to its corresponding capitalist with a one in 5 chance, if the current barricade is not already moving
                 if(!this.move_bar[i] && (ran.nextInt()%5 == 0)){
-                    this.barricades[i].moveTo(k.getPos()[0], k.getPos()[1]+k.getIconHeight());
+                    this.barricades[i].moveTo(k.getPos()[0], k.getPos()[1]+k.getIconHeight()+(Constants.cap_gap/2-barricades[i].getIconHeight()/2));
                     this.move_bar[i] = true;
                 }
 
@@ -148,7 +161,7 @@ public class GameThread extends Thread{
                 this.bot_caps[i].moveTo((int)k.getPos()[0], (int)k.getPos()[1]+800+Constants.cap_gap);
             }
 
-
+            //stop a barricade's movement once it is completely off the left side of the screen
             if(barricades[i].getPos()[0] <= -barricades[i].getIconWidth()){
                 this.move_bar[i] = false;
             }
@@ -191,20 +204,20 @@ public class GameThread extends Thread{
             //collision of worker and capitalist
             if( 
                 //if the difference between the worker's center x coordinate and the capitalist's center x coordinate 
-                (Math.abs((workerPosX+this.worker.getIconWidth()/2) - (kPos[0]+k.getIconWidth()/2))<(this.worker.getIconWidth()/2 - 10 + k.getIconWidth()/2))
+                (Math.abs((workerPosX+Constants.player_width*Constants.player_scale/2) - (kPos[0]+k.getIconWidth()/2))<(Constants.player_width*Constants.player_scale/2 - 10 + k.getIconWidth()/2))
                 //AND
                 &&(
                     //the worker is above the bottom edge of the top capitalist
-                    (workerPosY <= (kPos[1]+800))
+                    (workerPosY+10 <= (kPos[1]+800))
                     //OR
                     ||
                     //the worker's bottom edge is below the bottom capitalist's top edge
-                    ((workerPosY+this.worker.getIconHeight())>= kPos[1]+800+Constants.cap_gap)
+                    ((workerPosY+this.worker.getIconHeight()-10)>= kPos[1]+800+Constants.cap_gap)
                     //OR
                     ||
                     //The worker's rightmost edge is at the same position as or to the right of the barricade's leftmost edge
                     //while that barrier is moving
-                    ((this.move_bar[i])&&((workerPosX+this.worker.getIconWidth())>=this.barricades[i].getPos()[0]))
+                    ((this.move_bar[i])&&((workerPosX+this.worker.getIconWidth()-10)>=this.barricades[i].getPos()[0]))
                 )
             ){//then the player is colliding with a barrier or a capitalist and loses
                 //System.out.println("collision");
@@ -226,4 +239,11 @@ public class GameThread extends Thread{
         this.running = running;
     }
 
+    public void pauseGame(){
+        this.running = false;
+    }
+
+    public void resume(){
+        this.running = true;
+    }
 }

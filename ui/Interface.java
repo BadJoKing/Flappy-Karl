@@ -33,6 +33,7 @@ public class Interface extends JFrame{
         this.setSize(600,800);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
+        this.setUndecorated(true);
 
         this.layout = new CardLayout();
         //creates the main panel
@@ -60,10 +61,11 @@ public class Interface extends JFrame{
         this.panel.add(this.gp);
         this.layout.addLayoutComponent(this.gp, "game");
 
-        this.aboutLabel = new JLabel("<html>Ein Spiel von<br/>Beni Antesberger<br/>Nox Kircher<br/>Felix Schmid-Burgk");
+        this.aboutLabel = new JLabel("<html><h1>Anleitung</h1><br/>Pfeil nach oben ↑: Springen<br/>Pfeil nach rechts →: Schießen<br/>Esc: Zurück zum Hauptmenü<br/><br/><br/><h1>Ein Spiel von:</h1><br/>Beni Antesberger<br/>Nox Kircher<br/>Felix Schmid-Burgk<br/><br/>Dieses Spiel ist im Rahmen eines Informatikprojekts der<br/>Jahrgangsstufe Q12 des Carl-Spitzweg-Gymnasiums <br/>Germering entstanden<br/><br/>Source Code erhältlich unter github.com/BadJoKing/Flappy-Karl");
         this.aboutLabel.setSize(600,800);
+        
         try {
-            this.aboutLabel.setFont(Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Anarchaos.otf")).deriveFont(60f));
+            this.aboutLabel.setFont(Font.createFont(Font.TRUETYPE_FONT, new File("Assets/pixel-arial-14.otf")).deriveFont(20f));
         } catch (FontFormatException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

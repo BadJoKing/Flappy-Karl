@@ -9,24 +9,41 @@ public class Arbeiter extends Entity {
     private Bullet bullet;
     private String flapPath;
     private String path;
+    private Image mainImage;
+    private Image flapImage;
     public Arbeiter(String path, String flapPath) {
         super(path);
         this.path = path;
         this.bullet = new Bullet(Constants.bulletPath, this.getPos(), this.getSize());
         this.flapPath = flapPath;
+        this.mainImage = this.getImage().getScaledInstance(
+            (int)Math.floor(this.getIconWidth()*Constants.player_scale), 
+            (int)Math.floor(this.getIconHeight()*Constants.player_scale), 
+            Image.SCALE_DEFAULT
+        );
+        this.flapImage = new ImageIcon(this.flapPath)
+        .getImage()
+        .getScaledInstance(
+            (int)Math.floor(this.getIconWidth()*Constants.player_scale), 
+            (int)Math.floor(this.getIconHeight()*Constants.player_scale), 
+            Image.SCALE_DEFAULT
+        );
+        this.setImage(mainImage);
     }
 
     public void move(){
         this.y += this.vy/5;
         this.updateSpeed();
         if(this.vy < 0){
-            this.setImage(new ImageIcon(this.flapPath).getImage());
+            this.setImage(this.flapImage);
         } else {
-            this.setImage(new ImageIcon(this.path).getImage());
+            this.setImage(this.mainImage);
         }
         this.bullet.move(this.getPos(), this.getSize());
 
     }
+
+
 
     public void updateSpeed(){
         this.vy += 2; //downwards acceleration of 5px/frame
@@ -57,6 +74,9 @@ public class Arbeiter extends Entity {
         return this.bullet.getImage();
     }
 
+    public boolean shooting(){
+        return this.bullet.shooting();
+    }
     public double[] getBulletPos(){
         return this.bullet.getPos();
     }

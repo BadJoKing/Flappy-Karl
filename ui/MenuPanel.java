@@ -13,29 +13,31 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import controller.Constants;
 
 public class MenuPanel extends JPanel {
     private JButton[] menu;
+    private JButton[] backButtons;
     private JLabel menulabel;
+    private JLabel backlabel;
     private Interface parent;
     public Font customFont;
     public Font titel;
     private Color buttoncolor;
-    private String backgroundPath = "Assets/menupanel_background.png";
     private ImageIcon background;
 
 
     public MenuPanel(Interface parent) {
         this.parent = parent;
 
-        this.background = new ImageIcon(backgroundPath);
+        this.background = new ImageIcon(Constants.backgroundPath);
         //für leichte Transparanz bei den Knöpfen
-        this.buttoncolor = new Color(1f,0f,0f,0.4f);
+        this.buttoncolor = new Color(100,0,0);//new Color(1f,0f,0f,0.4f);
 
         try {
             //create the font to use. Specify the size!
-            this.customFont = Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Anarchaos.otf")).deriveFont(30f);
-            this.titel = Font.createFont(Font.TRUETYPE_FONT, new File("Assets/Anarchaos.otf")).deriveFont(60f);
+            this.customFont = Font.createFont(Font.TRUETYPE_FONT, new File(Constants.fontPath)).deriveFont(Font.BOLD,20f);
+            this.titel = Font.createFont(Font.TRUETYPE_FONT, new File(Constants.fontPath)).deriveFont(50f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             //register the font
             ge.registerFont(customFont);
@@ -68,20 +70,26 @@ public class MenuPanel extends JPanel {
         this.menu[2].setBounds(265, 180, 70, 40);
         this.add(menu[2]);
 
-        this.menulabel = new JLabel("FLAPPY KARL");
-        this.menulabel.setBounds(165, 50, 270, 50);
+        this.menulabel = new JLabel("FLAPPY KLAUS", JLabel.CENTER);
+        this.menulabel.setBounds(85, 50, 430, 50);
+        this.menulabel.setBackground(buttoncolor);
+        this.menulabel.setForeground(new Color(200,200,200));
+        this.menulabel.setOpaque(true);
+        this.menulabel.setBorder(BorderFactory.createLineBorder(new Color(0,128,0), 2));
         this.menulabel.setFont(titel);
         this.add(menulabel);
 
         //Knöpfe konfigurieren
         for (int i = 0; i < 3; i++) {
-            this.menu[i].setBackground(buttoncolor);
             //Hintergrund transparent
-            //this.menu[i].setContentAreaFilled(false);
-            //this.menu[i].setOpaque(false);
-            this.menu[i].setBorder(BorderFactory.createLineBorder(Color.yellow, 2));
-            this.menu[i].setForeground(Color.yellow);
+            //this.menu[i].setContentAreaFilled(true);
+            //this.menu[i].setOpaque(true);
+            this.menu[i].setBackground(buttoncolor);
+            this.menu[i].setBorder(BorderFactory.createLineBorder(new Color(0,128,0), 2));
+            this.menu[i].setForeground(new Color(200,200,200));
             this.menu[i].setFont(customFont);
+            this.menu[i].setAlignmentX(CENTER_ALIGNMENT);
+            this.menu[i].setAlignmentY(CENTER_ALIGNMENT);
         }
 
         //Hintergrund des Panels rot färben

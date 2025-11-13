@@ -9,6 +9,9 @@ public class Entity extends ImageIcon{
         super(path);
     }
 
+    public Entity(String path, int x){
+        super(path);
+    }
     
     public void moveTo(double x, double y){
         this.x = x;
